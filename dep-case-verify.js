@@ -19,10 +19,12 @@ function pathSteps(pathString) {
 function error(stream, row, step) {
   var id = path.relative(process.cwd(), row.id);
   Object.keys(row.deps).some(function(key) {
-    if (row.deps[key].indexOf(step) !== -1) {
-      var err = new Error('Unmatched case in "' + id + '" for "' + key + '"');
-      stream.emit('error', err);
-      return true;
+    if (typeof row.deps[key] === 'string') {
+      if (row.deps[key].indexOf(step) !== -1) {
+        var err = new Error('Unmatched case in "' + id + '" for "' + key + '"');
+        stream.emit('error', err);
+        return true;
+      }
     }
   });
 }
